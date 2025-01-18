@@ -9,7 +9,7 @@ import edu.wpi.first.math.kinematics.SwerveModulePosition;
 
 import java.text.BreakIterator;
 
-import com.ctre.phoenix.sensors.Pigeon2;
+import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -134,12 +134,12 @@ public class Swerve extends SubsystemBase {
     }
 
     public Rotation2d getYaw() {
-        return (SwerveConfig.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw()) : Rotation2d.fromDegrees(gyro.getYaw());
+        return (SwerveConfig.invertGyro) ? Rotation2d.fromDegrees(360 - gyro.getYaw().getValueAsDouble()) : Rotation2d.fromDegrees(gyro.getYaw().getValueAsDouble());
     }
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("yaw", gyro.getYaw());
+        SmartDashboard.putNumber("yaw", gyro.getYaw().getValueAsDouble());
         for(SwerveModule mod : mSwerveMods) {
             SmartDashboard.putNumber("REV Mod " + mod.getModuleNumber() + " Cancoder", mod.getCanCoder().getDegrees());
             SmartDashboard.putNumber("REV Mod " + mod.getModuleNumber() + " Integrated", mod.getPosition().angle.getDegrees());

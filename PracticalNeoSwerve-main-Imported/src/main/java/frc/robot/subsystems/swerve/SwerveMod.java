@@ -9,12 +9,10 @@ import frc.lib.util.swerveUtil.CTREModuleState;
 import frc.lib.util.swerveUtil.RevSwerveModuleConstants;
 
 import com.ctre.phoenix.sensors.CANCoder;
-import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.SparkPIDController;
-import com.revrobotics.CANSparkBase.ControlType;
-import com.revrobotics.CANSparkBase.FaultID;
-import com.revrobotics.CANSparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.SparkMax;
 
 /**
  * a Swerve Modules using REV Robotics motor controllers and CTRE CANcoder absolute encoders.
@@ -24,8 +22,8 @@ public class SwerveMod implements SwerveModule
     public int moduleNumber;
     private Rotation2d angleOffset;
 
-    private CANSparkMax mAngleMotor;
-    private CANSparkMax mDriveMotor;
+    private SparkMax mAngleMotor;
+    private SparkMax mDriveMotor;
 
     private CANCoder angleEncoder;
     private RelativeEncoder relAngleEncoder;
@@ -39,11 +37,11 @@ public class SwerveMod implements SwerveModule
         
        
         /* Angle Motor Config */
-        mAngleMotor = new CANSparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
+        mAngleMotor = new SparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
         configAngleMotor();
 
         /* Drive Motor Config */
-        mDriveMotor = new CANSparkMax(moduleConstants.driveMotorID,  MotorType.kBrushless);
+        mDriveMotor = new SparkMax(moduleConstants.driveMotorID,  MotorType.kBrushless);
         configDriveMotor();
 
          /* Angle Encoder Config */
@@ -168,7 +166,7 @@ public class SwerveMod implements SwerveModule
         Rotation2d angle = desiredState.angle; 
         //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
-        SparkPIDController controller = mAngleMotor.getPIDController();
+        SparkPIDController controller = mAngleMotor.getPIDController(); // i believe this is now closed loop controller
         
         double degReference = angle.getDegrees();
      
