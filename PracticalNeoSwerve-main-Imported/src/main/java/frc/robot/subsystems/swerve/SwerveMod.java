@@ -156,7 +156,7 @@ public class SwerveMod implements SwerveModule
  
         double velocity = desiredState.speedMetersPerSecond;
         
-        SparkPIDController controller = mDriveMotor.getClosedLoopController();
+        SparkClosedLoopController controller = mDriveMotor.getClosedLoopController();
         controller.setReference(velocity, ControlType.kVelocity, 0);
         
     }
