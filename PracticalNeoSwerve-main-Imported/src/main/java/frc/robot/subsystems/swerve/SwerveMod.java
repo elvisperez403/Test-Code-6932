@@ -31,7 +31,8 @@ public class SwerveMod implements SwerveModule
     private RelativeEncoder relAngleEncoder;
     private RelativeEncoder relDriveEncoder;
 
-    private SparkMaxConfig config;
+    private SparkMaxConfig configDrive;
+    private SparkMaxConfig configAngle;
 
 
     public SwerveMod(int moduleNumber, RevSwerveModuleConstants moduleConstants)
@@ -67,17 +68,15 @@ public class SwerveMod implements SwerveModule
        
         relDriveEncoder = mDriveMotor.getEncoder();
         relDriveEncoder.setPosition(0);
-
-         
-        config.encoder
+        configDrive.encoder
             .positionConversionFactor(SwerveConfig.driveRevToMeters)
             .velocityConversionFactor(SwerveConfig.driveRpmToMetersPerSecond);
 
         
         relAngleEncoder = mAngleMotor.getEncoder();
-        relAngleEncoder.setPositionConversionFactor(SwerveConfig.DegreesPerTurnRotation);
-        // in degrees/sec
-        relAngleEncoder.setVelocityConversionFactor(SwerveConfig.DegreesPerTurnRotation / 60);
+        configAngle.encoder
+            .positionConversionFactor(SwerveConfig.DegreesPerTurnRotation)
+            .velocityConversionFactor(SwerveConfig.DegreesPerTurnRotation / 60);
     
 
         resetToAbsolute();
