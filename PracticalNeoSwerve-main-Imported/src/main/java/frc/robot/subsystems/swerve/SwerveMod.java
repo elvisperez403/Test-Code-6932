@@ -9,6 +9,7 @@ import frc.lib.util.swerveUtil.CTREModuleState;
 import frc.lib.util.swerveUtil.RevSwerveModuleConstants;
 
 import com.ctre.phoenix.sensors.CANCoder;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -57,7 +58,7 @@ public class SwerveMod implements SwerveModule
     {     
         // absolute encoder   
       
-        angleEncoder.configFactoryDefault();
+        angleEncoder.getConfigurator().apply(new CANcoderConfiguration());
         angleEncoder.configAllSettings(new SwerveConfig().canCoderConfig);
        
         relDriveEncoder = mDriveMotor.getEncoder();

@@ -5,11 +5,10 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.POVButton;
 import frc.robot.commands.*;
-import frc.robot.subsystems.PoseEstimator;
+//import frc.robot.subsystems.PoseEstimator;
 import frc.robot.subsystems.swerve.Swerve;
 
 /**
@@ -30,7 +29,7 @@ public class RobotContainer {
 
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
-    private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    //private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
 
     private final JoystickButton dampen = new JoystickButton(driver, XboxController.Button.kRightBumper.value);
 
@@ -41,7 +40,7 @@ public class RobotContainer {
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
-    private final PoseEstimator s_PoseEstimator = new PoseEstimator();
+   // private final PoseEstimator s_PoseEstimator = new PoseEstimator();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
