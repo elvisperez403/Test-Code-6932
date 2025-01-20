@@ -25,7 +25,7 @@ public class SwerveMod implements SwerveModule
     private SparkMax mAngleMotor;
     private SparkMax mDriveMotor;
 
-    private CANCoder angleEncoder;
+    public static CANCoder angleEncoder;
     private RelativeEncoder relAngleEncoder;
     private RelativeEncoder relDriveEncoder;
 

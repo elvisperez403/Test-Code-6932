@@ -4,6 +4,8 @@ import com.ctre.phoenix.sensors.AbsoluteSensorRange;
 import com.ctre.phoenix.sensors.CANCoderConfiguration;
 import com.ctre.phoenix.sensors.SensorInitializationStrategy;
 import com.ctre.phoenix.sensors.SensorTimeBase;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.configs.CANcoderConfigurator;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 
 import edu.wpi.first.math.geometry.Translation2d;
@@ -15,7 +17,7 @@ import frc.lib.util.swerveUtil.COTSFalconSwerveConstants;
 public class SwerveConfig 
 {
     
-    public CANCoderConfiguration canCoderConfig;
+    public CANcoderConfigurator canCoderConfig;
 
     //
     public static final IdleMode driveIdleMode = IdleMode.kBrake;
@@ -110,7 +112,7 @@ public class SwerveConfig
 
     public SwerveConfig()
     {
-        canCoderConfig = new CANCoderConfiguration();
+        canCoderConfig = new CANcoderConfiguration();
         canCoderConfig.absoluteSensorRange = AbsoluteSensorRange.Unsigned_0_to_360;
         canCoderConfig.sensorDirection = canCoderInvert;
         canCoderConfig.initializationStrategy = SensorInitializationStrategy.BootToAbsolutePosition;
