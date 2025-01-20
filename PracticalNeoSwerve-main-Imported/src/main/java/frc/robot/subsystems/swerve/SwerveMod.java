@@ -12,8 +12,12 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkBase.PersistMode;
+import com.revrobotics.spark.SparkBase.ResetMode;
 import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.ClosedLoopConfig.FeedbackSensor;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
 
@@ -71,55 +75,49 @@ public class SwerveMod implements SwerveModule
         relDriveEncoder.setPosition(0);
         configDrive.encoder
             .positionConversionFactor(SwerveConfig.driveRevToMeters)
-            .velocityConversionFactor(SwerveConfig.driveRpmToMetersPerSecond);
-
-        
-        relAngleEncoder = mAngleMotor.getEncoder();
-        configAngle.encoder
-            .positionConversionFactor(SwerveConfig.DegreesPerTurnRotation)
-            .velocityConversionFactor(SwerveConfig.DegreesPerTurnRotation / 60);
-    
+            .velocityConversionFactor(SwerveConfig.driveRpmToMetersPerSecond);    
 
         resetToAbsolute();
-        mDriveMotor.burnFlash();
-        mAngleMotor.burnFlash();
-        
+        mDriveMotor.configure(configDrive, null, null);
     }
 
     private void configAngleMotor()
     {
-        mAngleMotor.restoreFactoryDefaults();
-        SparkPIDController controller = mAngleMotor.getClosedLoopController();
-        controller.setP(SwerveConfig.angleKP, 0);
-        controller.setI(SwerveConfig.angleKI,0);
-        controller.setD(SwerveConfig.angleKD,0);
-        controller.setFF(SwerveConfig.angleKF,0);
-        controller.setOutputRange(-SwerveConfig.anglePower, SwerveConfig.anglePower);
-        mAngleMotor.setSmartCurrentLimit(SwerveConfig.angleContinuousCurrentLimit);
-       
-        mAngleMotor.setInverted(SwerveConfig.angleMotorInvert);
-        mAngleMotor.setIdleMode(SwerveConfig.angleIdleMode);
 
-        
+        configAngle
+            .inverted(true)
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(SwerveConfig.angleContinuousCurrentLimit);
+        configAngle.encoder
+            .positionConversionFactor(SwerveConfig.DegreesPerTurnRotation)
+            .velocityConversionFactor(SwerveConfig.DegreesPerTurnRotation / 60);
+        configAngle.closedLoop
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            .pidf(SwerveConfig.angleKP, SwerveConfig.angleKI, SwerveConfig.angleKD, SwerveConfig.angleKF)
+            .outputRange(-SwerveConfig.anglePower, SwerveConfig.anglePower);
+            
+    
+        mAngleMotor.configure(configAngle, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);       
        
     }
 
     private void configDriveMotor()
     {        
-        mDriveMotor.restoreFactoryDefaults();
-        SparkPIDController controller = mDriveMotor.getClosedLoopController();
-        controller.setP(SwerveConfig.driveKP,0);
-        controller.setI(SwerveConfig.driveKI,0);
-        controller.setD(SwerveConfig.driveKD,0);
-        controller.setFF(SwerveConfig.driveKF,0);
-        controller.setOutputRange(-SwerveConfig.drivePower, SwerveConfig.drivePower);
-        mDriveMotor.setSmartCurrentLimit(SwerveConfig.driveContinuousCurrentLimit);
-        mDriveMotor.setInverted(SwerveConfig.driveMotorInvert);
-        mDriveMotor.setIdleMode(SwerveConfig.driveIdleMode); 
-    
-       
-       
-       
+  
+        configDrive
+            .inverted(false)
+            .idleMode(IdleMode.kBrake)
+            .smartCurrentLimit(SwerveConfig.driveContinuousCurrentLimit);
+        configDrive.encoder
+            .positionConversionFactor(SwerveConfig.driveRevToMeters)
+            .velocityConversionFactor(SwerveConfig.driveRpmToMetersPerSecond);
+        configDrive.closedLoop
+            .feedbackSensor(FeedbackSensor.kPrimaryEncoder)
+            .pidf(SwerveConfig.driveKP, SwerveConfig.driveKI, SwerveConfig.driveKD, SwerveConfig.driveKF)
+            .outputRange(-SwerveConfig.drivePower, SwerveConfig.drivePower);
+        
+        mDriveMotor.configure(configDrive, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+              
     }
 
 
@@ -133,12 +131,12 @@ public class SwerveMod implements SwerveModule
         setAngle(desiredState);
         setSpeed(desiredState, isOpenLoop);
 
-        if(mDriveMotor.getFault(FaultID.kSensorFault))
+        if(mDriveMotor.getFaults().sensor)
         {
             DriverStation.reportWarning("Sensor Fault on Drive Motor ID:"+mDriveMotor.getDeviceId(), false);
         }
 
-        if(mAngleMotor.getFault(FaultID.kSensorFault))
+        if(mAngleMotor.getFaults().sensor)
         {
             DriverStation.reportWarning("Sensor Fault on Angle Motor ID:"+mAngleMotor.getDeviceId(), false);
         }
@@ -157,7 +155,7 @@ public class SwerveMod implements SwerveModule
         double velocity = desiredState.speedMetersPerSecond;
         
         SparkClosedLoopController controller = mDriveMotor.getClosedLoopController();
-        controller.setReference(velocity, ControlType.kVelocity, 0);
+        controller.setReference(velocity, ControlType.kVelocity);
         
     }
 
@@ -178,7 +176,7 @@ public class SwerveMod implements SwerveModule
      
        
         
-        controller.setReference (degReference, ControlType.kPosition, 0);
+        controller.setReference(degReference, ControlType.kPosition);
         
     }
 
