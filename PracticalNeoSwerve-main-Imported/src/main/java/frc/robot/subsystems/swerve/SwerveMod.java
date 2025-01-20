@@ -7,9 +7,9 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.wpilibj.DriverStation;
 import frc.lib.util.swerveUtil.CTREModuleState;
 import frc.lib.util.swerveUtil.RevSwerveModuleConstants;
-
-import com.ctre.phoenix.sensors.CANCoder;
+;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
@@ -27,7 +27,7 @@ public class SwerveMod implements SwerveModule
     private SparkMax mAngleMotor;
     private SparkMax mDriveMotor;
 
-    public static CANCoder angleEncoder;
+    public static CANcoder angleEncoder;
     private RelativeEncoder relAngleEncoder;
     private RelativeEncoder relDriveEncoder;
 
@@ -50,7 +50,7 @@ public class SwerveMod implements SwerveModule
 
 
          /* Angle Encoder Config */
-        angleEncoder = new CANCoder(moduleConstants.cancoderID);
+        angleEncoder = new CANcoder(moduleConstants.cancoderID);
         configEncoders();
 
 
@@ -63,7 +63,7 @@ public class SwerveMod implements SwerveModule
         // absolute encoder   
       
         angleEncoder.getConfigurator().apply(new CANcoderConfiguration());
-        angleEncoder.configAllSettings(new SwerveConfig().canCoderConfig);
+        angleEncoder.getConfigurator().apply(new SwerveConfig().canCoderConfig);
        
         relDriveEncoder = mDriveMotor.getEncoder();
         relDriveEncoder.setPosition(0);
