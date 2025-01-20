@@ -12,6 +12,7 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.hardware.CANcoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
@@ -88,7 +89,7 @@ public class SwerveMod implements SwerveModule
     private void configAngleMotor()
     {
         mAngleMotor.restoreFactoryDefaults();
-        SparkPIDController controller = mAngleMotor.getPIDController();
+        SparkPIDController controller = mAngleMotor.getClosedLoopController();
         controller.setP(SwerveConfig.angleKP, 0);
         controller.setI(SwerveConfig.angleKI,0);
         controller.setD(SwerveConfig.angleKD,0);
@@ -106,7 +107,7 @@ public class SwerveMod implements SwerveModule
     private void configDriveMotor()
     {        
         mDriveMotor.restoreFactoryDefaults();
-        SparkPIDController controller = mDriveMotor.getPIDController();
+        SparkPIDController controller = mDriveMotor.getClosedLoopController();
         controller.setP(SwerveConfig.driveKP,0);
         controller.setI(SwerveConfig.driveKI,0);
         controller.setD(SwerveConfig.driveKD,0);
@@ -155,7 +156,7 @@ public class SwerveMod implements SwerveModule
  
         double velocity = desiredState.speedMetersPerSecond;
         
-        SparkPIDController controller = mDriveMotor.getPIDController();
+        SparkPIDController controller = mDriveMotor.getClosedLoopController();
         controller.setReference(velocity, ControlType.kVelocity, 0);
         
     }
@@ -171,7 +172,7 @@ public class SwerveMod implements SwerveModule
         Rotation2d angle = desiredState.angle; 
         //Prevent rotating module if speed is less then 1%. Prevents Jittering.
         
-        SparkPIDController controller = mAngleMotor.getPIDController(); // i believe this is now closed loop controller
+        SparkClosedLoopController controller = mAngleMotor.getClosedLoopController(); // i believe this is now closed loop controller
         
         double degReference = angle.getDegrees();
      
