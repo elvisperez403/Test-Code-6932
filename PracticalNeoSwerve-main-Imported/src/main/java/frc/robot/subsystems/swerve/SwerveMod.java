@@ -12,6 +12,7 @@ import com.ctre.phoenix.sensors.CANCoder;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkMax;
 
 /**
@@ -29,6 +30,8 @@ public class SwerveMod implements SwerveModule
     private RelativeEncoder relAngleEncoder;
     private RelativeEncoder relDriveEncoder;
 
+    private SparkMaxConfig config;
+
 
     public SwerveMod(int moduleNumber, RevSwerveModuleConstants moduleConstants)
     {
@@ -43,6 +46,7 @@ public class SwerveMod implements SwerveModule
         /* Drive Motor Config */
         mDriveMotor = new SparkMax(moduleConstants.driveMotorID,  MotorType.kBrushless);
         configDriveMotor();
+
 
          /* Angle Encoder Config */
         angleEncoder = new CANCoder(moduleConstants.cancoderID);
@@ -64,8 +68,9 @@ public class SwerveMod implements SwerveModule
         relDriveEncoder.setPosition(0);
 
          
-        relDriveEncoder.setPositionConversionFactor(SwerveConfig.driveRevToMeters);
-        relDriveEncoder.setVelocityConversionFactor(SwerveConfig.driveRpmToMetersPerSecond);
+        config.encoder
+            .positionConversionFactor(SwerveConfig.driveRevToMeters)
+            .velocityConversionFactor(SwerveConfig.driveRpmToMetersPerSecond);
 
         
         relAngleEncoder = mAngleMotor.getEncoder();
