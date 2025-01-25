@@ -79,6 +79,7 @@ public class SwerveMod implements SwerveModule
 
         resetToAbsolute();
         mDriveMotor.configure(configDrive, null, null);
+        mAngleMotor.configure(configAngle, null, null);
     }
 
     private void configAngleMotor()
