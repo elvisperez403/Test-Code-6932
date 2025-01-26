@@ -71,15 +71,15 @@ public class SwerveMod implements SwerveModule
         angleEncoder.getConfigurator().apply(new CANcoderConfiguration());
         angleEncoder.getConfigurator().apply(new SwerveConfig().canCoderConfig);
        
-        relDriveEncoder = mDriveMotor.getEncoder();
+        /*relDriveEncoder = mDriveMotor.getEncoder();
         relDriveEncoder.setPosition(0);
         configDrive.encoder
             .positionConversionFactor(SwerveConfig.driveRevToMeters)
-            .velocityConversionFactor(SwerveConfig.driveRpmToMetersPerSecond);    
+            .velocityConversionFactor(SwerveConfig.driveRpmToMetersPerSecond);*/    
 
         resetToAbsolute();
-        mDriveMotor.configure(configDrive, null, null);
-        mAngleMotor.configure(configAngle, null, null);
+        /*mDriveMotor.configure(configDrive, null, null);
+        mAngleMotor.configure(configAngle, null, null);*/
     }
 
     private void configAngleMotor()
