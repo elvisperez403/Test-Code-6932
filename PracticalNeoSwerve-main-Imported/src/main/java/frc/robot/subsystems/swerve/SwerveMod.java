@@ -48,10 +48,12 @@ public class SwerveMod implements SwerveModule
        
         /* Angle Motor Config */
         mAngleMotor = new SparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
+        relAngleEncoder = mAngleMotor.getEncoder();
         configAngleMotor();
 
         /* Drive Motor Config */
         mDriveMotor = new SparkMax(moduleConstants.driveMotorID,  MotorType.kBrushless);
+        relDriveEncoder = mDriveMotor.getEncoder();
         configDriveMotor();
 
 
