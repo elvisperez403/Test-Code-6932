@@ -44,8 +44,8 @@ public class SwerveMod implements SwerveModule
     {
         this.moduleNumber = moduleNumber;
         this.angleOffset = moduleConstants.angleOffset;
-        
-       
+        configAngle = new SparkMaxConfig();
+        configDrive = new SparkMaxConfig();
         /* Angle Motor Config */
         mAngleMotor = new SparkMax(moduleConstants.angleMotorID, MotorType.kBrushless);
         relAngleEncoder = mAngleMotor.getEncoder();
